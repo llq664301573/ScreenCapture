@@ -1,13 +1,12 @@
 #include "ScreenCapture.h"
 
-ScreenCapture::ScreenCapture(QWidget *parent) : QWidget(parent)
+ScreenCapture::ScreenCapture(QWidget *parent) : QWidget(parent, Qt::WindowStaysOnTopHint)
 {
-    setMouseTracking(true);
+	setMouseTracking(true);
 
-    QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_Escape), this);
-    connect(shortcut, SIGNAL(activated()), this, SLOT(hide()));
+	connect(new QShortcut(QKeySequence(Qt::Key_Escape), this), SIGNAL(activated()), this, SLOT(hide()));
 
-    createTrayIcon();
+	createTrayIcon();
 }
 
 ScreenCapture::~ScreenCapture()
@@ -51,6 +50,10 @@ void ScreenCapture::capture()
 
     topWindows.clear();
     enumChildWindows(NULL, topWindows);
+
+	int style = ::GetWindowLong(topWindows[0].hwnd, GWL_STYLE);
+	if(style & WS_POPUP)//说明是弹出菜单
+		CloseWindow(topWindows[0].hwnd);
 
     for (int i = 0; i < childWindows.size(); i++)
         delete childWindows[i];
