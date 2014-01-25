@@ -9,13 +9,15 @@ AssignDialog::AssignDialog(QWidget *parent/* =0 */): QDialog(parent)
     form->setSizeConstraint( QLayout::SetFixedSize );
 
     shiftModifier = new QCheckBox("ShiftModifier");
+	shiftModifier->setChecked(true);
     controlModifier = new QCheckBox("ControlModifier");
+	controlModifier->setChecked(true);
     altModifier = new QCheckBox("AltModifier");
     form->addRow(shiftModifier);
     form->addRow(controlModifier);
     form->addRow(altModifier);
 
-    virtualKey = new QLineEdit();
+    virtualKey = new QLineEdit("0x41");
     virtualKey->setReadOnly(true);
     form->addRow("Virtual-Key", virtualKey);
 
@@ -27,7 +29,7 @@ AssignDialog::AssignDialog(QWidget *parent/* =0 */): QDialog(parent)
 
     setLayout(form);
 
-    show();
+	accept();
 }
 
 AssignDialog::~AssignDialog()
